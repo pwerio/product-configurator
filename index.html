@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Interativo - Construção Civil</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f9f9f9;
+        }
+
+        header {
+            width: 100%;
+            padding: 1rem;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        main {
+            display: flex;
+            width: 90%;
+            max-width: 1200px;
+            margin-top: 2rem;
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        #visualizacao {
+            flex: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f1f1f1;
+            padding: 1rem;
+        }
+
+        #visualizacao img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        #menu-produtos {
+            flex: 1;
+            padding: 1.5rem;
+            border-right: 1px solid #e0e0e0;
+        }
+
+        #menu-produtos h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        #menu-produtos ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #menu-produtos li {
+            margin-bottom: 1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 1rem;
+        }
+
+        #menu-produtos li span {
+            margin-left: 0.5rem;
+            color: #666;
+        }
+
+        #carrinho {
+            flex: 1;
+            padding: 1.5rem;
+        }
+
+        #carrinho h2 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        #itens-carrinho {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 1rem;
+        }
+
+        #itens-carrinho li {
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        #total {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Escolha seus Acabamentos</h1>
+    </header>
+
+    <main>
+        <section id="visualizacao">
+            <img src="cozinha-exemplo.jpg" alt="Visualização do ambiente" id="ambiente-img">
+        </section>
+
+        <section id="menu-produtos">
+            <h2>Opções de Personalização</h2>
+            <ul>
+                <li onclick="adicionarAoCarrinho('Torneira', 250.00)">
+                    <img src="torneira.jpg" alt="Torneira" width="50">
+                    <span>Torneira - R$ 250,00</span>
+                </li>
+                <li onclick="adicionarAoCarrinho('Porcelanato', 150.00)">
+                    <img src="porcelanato.jpg" alt="Porcelanato" width="50">
+                    <span>Porcelanato - R$ 150,00</span>
+                </li>
+                <li onclick="adicionarAoCarrinho('Puxador', 50.00)">
+                    <img src="puxador.jpg" alt="Puxador" width="50">
+                    <span>Puxador - R$ 50,00</span>
+                </li>
+            </ul>
+        </section>
+
+        <section id="carrinho">
+            <h2>Carrinho</h2>
+            <ul id="itens-carrinho"></ul>
+            <p>Total: <span id="total">R$ 0,00</span></p>
+            <button>Finalizar Compra</button>
+        </section>
+    </main>
+
+    <script>
+        let total = 0;
+
+        function adicionarAoCarrinho(item, preco) {
+            const listaCarrinho = document.getElementById('itens-carrinho');
+            const novoItem = document.createElement('li');
+            novoItem.textContent = `${item} - R$ ${preco.toFixed(2)}`;
+            listaCarrinho.appendChild(novoItem);
+
+            total += preco;
+            document.getElementById('total').textContent = `R$ ${total.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
