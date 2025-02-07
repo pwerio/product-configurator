@@ -10,9 +10,6 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             background-color: #f9f9f9;
         }
 
@@ -26,13 +23,11 @@
 
         main {
             display: flex;
+            justify-content: space-between;
             width: 90%;
             max-width: 1200px;
-            margin-top: 2rem;
-            background: #fff;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
+            margin: 2rem auto;
+            position: relative;
         }
 
         #visualizacao {
@@ -42,6 +37,7 @@
             justify-content: center;
             background-color: #f1f1f1;
             padding: 1rem;
+            border-radius: 8px;
         }
 
         #visualizacao img {
@@ -52,7 +48,10 @@
         #menu-produtos {
             flex: 1;
             padding: 1.5rem;
-            border-right: 1px solid #e0e0e0;
+            margin-right: 1rem;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         #menu-produtos h2 {
@@ -80,8 +79,15 @@
         }
 
         #carrinho {
-            flex: 1;
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            width: 300px;
+            background-color: #fff;
             padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
         }
 
         #carrinho h2 {
@@ -98,11 +104,14 @@
         #itens-carrinho li {
             margin-bottom: 0.5rem;
             font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
         }
 
         #total {
             font-size: 1.25rem;
             font-weight: bold;
+            text-align: right;
         }
 
         button {
@@ -119,6 +128,15 @@
         button:hover {
             background-color: #0056b3;
         }
+
+        select {
+            padding: 0.5rem;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
     </style>
 </head>
 <body>
@@ -127,13 +145,15 @@
     </header>
 
     <main>
-        <section id="visualizacao">
-            <img src="cozinha-exemplo.jpg" alt="Visualização do ambiente" id="ambiente-img">
-        </section>
-
         <section id="menu-produtos">
+            <h2>Selecione o Ambiente</h2>
+            <select id="ambiente-seletor" onchange="alterarAmbiente()">
+                <option value="cozinha">Cozinha</option>
+                <option value="sala">Sala</option>
+                <option value="quarto">Quarto</option>
+            </select>
             <h2>Opções de Personalização</h2>
-            <ul>
+            <ul id="produtos-lista">
                 <li onclick="adicionarAoCarrinho('Torneira', 250.00)">
                     <img src="torneira.jpg" alt="Torneira" width="50">
                     <span>Torneira - R$ 250,00</span>
@@ -142,11 +162,11 @@
                     <img src="porcelanato.jpg" alt="Porcelanato" width="50">
                     <span>Porcelanato - R$ 150,00</span>
                 </li>
-                <li onclick="adicionarAoCarrinho('Puxador', 50.00)">
-                    <img src="puxador.jpg" alt="Puxador" width="50">
-                    <span>Puxador - R$ 50,00</span>
-                </li>
             </ul>
+        </section>
+
+        <section id="visualizacao">
+            <img src="cozinha-exemplo.jpg" alt="Visualização do ambiente" id="ambiente-img">
         </section>
 
         <section id="carrinho">
@@ -163,11 +183,61 @@
         function adicionarAoCarrinho(item, preco) {
             const listaCarrinho = document.getElementById('itens-carrinho');
             const novoItem = document.createElement('li');
-            novoItem.textContent = `${item} - R$ ${preco.toFixed(2)}`;
+
+            novoItem.innerHTML = `${item} - R$ ${preco.toFixed(2)} <button onclick="removerDoCarrinho(this, ${preco})">Remover</button>`;
             listaCarrinho.appendChild(novoItem);
 
             total += preco;
             document.getElementById('total').textContent = `R$ ${total.toFixed(2)}`;
+        }
+
+        function removerDoCarrinho(elemento, preco) {
+            elemento.parentElement.remove();
+            total -= preco;
+            document.getElementById('total').textContent = `R$ ${total.toFixed(2)}`;
+        }
+
+        function alterarAmbiente() {
+            const ambiente = document.getElementById('ambiente-seletor').value;
+            const imagem = document.getElementById('ambiente-img');
+            const listaProdutos = document.getElementById('produtos-lista');
+
+            let produtos = '';
+            if (ambiente === 'cozinha') {
+                imagem.src = 'cozinha-exemplo.jpg';
+                produtos = `
+                    <li onclick="adicionarAoCarrinho('Torneira', 250.00)">
+                        <img src="torneira.jpg" alt="Torneira" width="50">
+                        <span>Torneira - R$ 250,00</span>
+                    </li>
+                    <li onclick="adicionarAoCarrinho('Porcelanato', 150.00)">
+                        <img src="porcelanato.jpg" alt="Porcelanato" width="50">
+                        <span>Porcelanato - R$ 150,00</span>
+                    </li>`;
+            } else if (ambiente === 'sala') {
+                imagem.src = 'sala-exemplo.jpg';
+                produtos = `
+                    <li onclick="adicionarAoCarrinho('Tapete', 300.00)">
+                        <img src="tapete.jpg" alt="Tapete" width="50">
+                        <span>Tapete - R$ 300,00</span>
+                    </li>
+                    <li onclick="adicionarAoCarrinho('Cortina', 200.00)">
+                        <img src="cortina.jpg" alt="Cortina" width="50">
+                        <span>Cortina - R$ 200,00</span>
+                    </li>`;
+            } else if (ambiente === 'quarto') {
+                imagem.src = 'quarto-exemplo.jpg';
+                produtos = `
+                    <li onclick="adicionarAoCarrinho('Cama', 800.00)">
+                        <img src="cama.jpg" alt="Cama" width="50">
+                        <span>Cama - R$ 800,00</span>
+                    </li>
+                    <li onclick="adicionarAoCarrinho('Armário', 1200.00)">
+                        <img src="armario.jpg" alt="Armário" width="50">
+                        <span>Armário - R$ 1200,00</span>
+                    </li>`;
+            }
+            listaProdutos.innerHTML = produtos;
         }
     </script>
 </body>
